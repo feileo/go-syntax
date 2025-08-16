@@ -1,13 +1,11 @@
 {
-    "name": "GoHTML",
-    "scopeName": "source.gohtml",
-    "patterns": [
-        {
-            "include": "text.html.basic"
-        },
-        {
-            "include": "source.gotemplate"
-        }
-    ],
-    "repository": {}
+	"comments": {
+		"blockComment": [ "{{/*", "*/}}" ]
+  },
+	"brackets": [
+		["{", "}"],
+		["{{", "}}"],
+		["[", "]"],
+		["(", ")"]
+	]
 }
