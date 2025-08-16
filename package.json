@@ -48,13 +48,13 @@
           "gotemplate"
         ],
         "extensions": [".gotmpl"],
-        "configuration": "./gotemplate-config.json"
+        "configuration": "./gotemplate-configuration.json"
       },
       {
         "id": "GoHTML",
         "aliases": ["gohtml"],
         "extensions": [".gohtml"],
-        "configuration": "./gohtml-config.json"
+        "configuration": "./gohtml-configuration.json"
       }
     ],
     "grammars": [
