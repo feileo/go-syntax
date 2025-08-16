@@ -41,6 +41,20 @@
           ".go"
         ],
         "configuration": "./language-configuration.json"
+      },
+      {
+        "id": "GoTemplate",
+        "aliases": [
+          "gotemplate"
+        ],
+        "extensions": [".gotmpl"],
+        "configuration": "./gotemplate-config.json"
+      },
+      {
+        "id": "GoHTML",
+        "aliases": ["gohtml"],
+        "extensions": [".gohtml"],
+        "configuration": "./gohtml-config.json"
       }
     ],
     "grammars": [
