@@ -48,6 +48,16 @@
         "language": "go",
         "scopeName": "source.go",
         "path": "./syntaxes/go.tmLanguage.json"
+      },
+      {
+        "language": "GoTemplate",
+        "scopeName": "source.gotemplate",
+        "path": "./syntaxes/gotemplate.tmLanguage.json"
+      },
+      {
+        "language": "GoHTML",
+        "scopeName": "source.gohtml",
+        "path": "./syntaxes/gohtml.tmLanguage.json"
       }
     ]
   }
