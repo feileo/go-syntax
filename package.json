@@ -2,7 +2,7 @@
   "name": "go-syntax",
   "displayName": "Go Syntax",
   "description": "Rich Syntax Highlighting for Go language",
-  "version": "0.8.5",
+  "version": "0.8.6",
   "author": "Furkan Ozalp",
   "publisher": "furkanozalp",
   "license": "MIT",
@@ -47,13 +47,19 @@
         "aliases": [
           "gotemplate"
         ],
-        "extensions": [".gotmpl"],
+        "extensions": [
+          ".gotmpl"
+        ],
         "configuration": "./gotemplate-configuration.json"
       },
       {
         "id": "GoHTML",
-        "aliases": ["gohtml"],
-        "extensions": [".gohtml"],
+        "aliases": [
+          "gohtml"
+        ],
+        "extensions": [
+          ".gohtml"
+        ],
         "configuration": "./gohtml-configuration.json"
       }
     ],
@@ -62,6 +68,13 @@
         "language": "go",
         "scopeName": "source.go",
         "path": "./syntaxes/go.tmLanguage.json"
+      },
+      {
+        "scopeName": "source.go.package-reference",
+        "injectTo": [
+          "source.go"
+        ],
+        "path": "./syntaxes/go-package-injection.tmLanguage.json"
       },
       {
         "language": "GoTemplate",

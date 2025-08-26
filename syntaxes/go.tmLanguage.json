@@ -2,6 +2,15 @@
   "name": "Go",
   "patterns": [
     {
+      "include": "#field_access_with_brace"
+    },
+    {
+      "include": "#brackets"
+    },
+    {
+      "include": "#bracket_priority_fix"
+    },
+    {
       "include": "#statements"
     }
   ],
@@ -29,7 +38,7 @@
         }
       },
       "comment": "After control variables, to not highlight as a struct/interface (before formatting with gofmt)",
-      "match": "(?:(?<=\\brange\\b|\\;|\\bif\\b|\\bfor\\b|\\<|\\>|\\<\\=|\\>\\=|\\=\\=|\\!\\=|\\w(?:\\+|/|\\-|\\*|\\%)|\\w(?:\\+|/|\\-|\\*|\\%)\\=|\\|\\||\\&\\&)(?:\\s*)((?![\\[\\]]+)[[:alnum:]\\-\\_\\!\\.\\[\\]\\<\\>\\=\\*/\\+\\%\\:]+)(?:\\s*)(?=\\{))"
+      "match": "(?:(?<=\\brange\\b|\\;|\\bif\\b|\\bfor\\b|\\<|\\>|\\<\\=|\\>\\=|\\=\\=|\\!\\=|\\w(?:\\+|/|\\-|\\*|\\%)|\\w(?:\\+|/|\\-|\\*|\\%)\\=|\\|\\||\\&\\&)(?:\\s*)((?![\\[\\]]+)(?![a-zA-Z_][a-zA-Z0-9_]*\\.[a-zA-Z_][a-zA-Z0-9_]*\\(\\)\\.[a-zA-Z_][a-zA-Z0-9_]*)[[:alnum:]\\-\\_\\[\\]\\<\\>\\=\\*/\\+\\%\\:]+)(?:\\s*)(?=\\{))"
     },
     "brackets": {
       "patterns": [
@@ -89,6 +98,40 @@
               "include": "$self"
             }
           ]
+        }
+      ]
+    },
+    "bracket_priority_fix": {
+      "patterns": [
+        {
+          "match": "\\{",
+          "name": "punctuation.definition.begin.bracket.curly.go",
+          "comment": "High priority curly brace start"
+        },
+        {
+          "match": "\\}",
+          "name": "punctuation.definition.end.bracket.curly.go",
+          "comment": "High priority curly brace end"
+        },
+        {
+          "match": "\\(",
+          "name": "punctuation.definition.begin.bracket.round.go",
+          "comment": "High priority round bracket start"
+        },
+        {
+          "match": "\\)",
+          "name": "punctuation.definition.end.bracket.round.go",
+          "comment": "High priority round bracket end"
+        },
+        {
+          "match": "\\[",
+          "name": "punctuation.definition.begin.bracket.square.go",
+          "comment": "High priority square bracket start"
+        },
+        {
+          "match": "\\]",
+          "name": "punctuation.definition.end.bracket.square.go",
+          "comment": "High priority square bracket end"
         }
       ]
     },
@@ -2141,6 +2184,111 @@
       "comment": "Property variables in struct",
       "match": "((?:\\b[\\w\\.]+)(?:\\:(?!\\=)))"
     },
+    "package_qualified_type": {
+      "captures": {
+        "1": {
+          "name": "entity.name.namespace.go"
+        },
+        "2": {
+          "name": "punctuation.other.period.go"
+        },
+        "3": {
+          "name": "entity.name.type.go"
+        }
+      },
+      "comment": "Package qualified types (e.g., context.Context, template.Template) in type contexts only",
+      "match": "\\b([a-z]\\w+)(\\.)([A-Z]\\w+)(?=\\s|\\)|\\,|\\{|\\[|$)"
+    },
+    "struct_literal_type": {
+      "captures": {
+        "1": {
+          "name": "variable.other.go"
+        },
+        "2": {
+          "name": "punctuation.other.period.go"
+        },
+        "3": {
+          "name": "entity.name.type.go"
+        }
+      },
+      "comment": "Struct literal types (e.g., task.SubmitParam{}, pkg.Type{})",
+      "match": "(?<=\\b(?:var|const|func|return|if|for|range|switch|case|default|select|go|defer|chan|map|interface|struct|type|import|package)\\s+|[a-zA-Z_][a-zA-Z0-9_]*\\s*[=:]=?\\s*|\\[|\\{|\\()([a-z]\\w*)(\\.)([A-Z]\\w*)(?=\\s*\\{)"
+    },
+    "field_access": {
+      "captures": {
+        "1": {
+          "name": "variable.other.go"
+        },
+        "2": {
+          "name": "punctuation.other.period.go"
+        },
+        "3": {
+          "name": "variable.other.property.go"
+        }
+      },
+      "comment": "Field access in expressions (e.g., person.Name, s.objectDAO)",
+      "match": "\\b([a-zA-Z_][a-zA-Z0-9_]*)(\\.)([a-zA-Z_][a-zA-Z0-9_]*)(?!\\s*\\()(?!\\s*\\{)"
+    },
+    "dot_field_access": {
+      "captures": {
+        "1": {
+          "name": "variable.other.property.go"
+        }
+      },
+      "comment": "Any field access after dot (e.g., .Object, .Meta, .Type)",
+      "match": "(?<=\\.)([a-zA-Z_][a-zA-Z0-9_]*)(?!\\s*\\()(?!\\s*\\{)"
+    },
+    "nested_field_access": {
+      "captures": {
+        "1": {
+          "name": "variable.other.property.go"
+        },
+        "2": {
+          "name": "punctuation.other.period.go"
+        },
+        "3": {
+          "name": "variable.other.property.go"
+        }
+      },
+      "comment": "Deep nested field access (e.g., .Space.nodes, .nodes.Master)",
+      "match": "(?<=\\.)([a-zA-Z_][a-zA-Z0-9_]*)(\\.)([a-zA-Z_][a-zA-Z0-9_]*)(?!\\s*\\()(?!\\s*\\{)"
+    },
+    "field_access_with_brace": {
+      "captures": {
+        "1": {
+          "name": "variable.other.go"
+        },
+        "2": {
+          "name": "punctuation.other.period.go"
+        },
+        "3": {
+          "name": "variable.other.property.go"
+        },
+        "4": {
+          "name": "punctuation.other.period.go"
+        },
+        "5": {
+          "name": "variable.other.property.go"
+        }
+      },
+      "comment": "Field access followed by brace (e.g., s.nodes.Slaves in s.nodes.Slaves{...})",
+      "match": "(?<=\\b(?:var|const|func|return|if|for|range|switch|case|default|select|go|defer|chan|map|interface|struct|type|import|package)\\s+|[a-zA-Z_][a-zA-Z0-9_]*\\s*[=:]=?\\s*|\\[|\\{|\\()\\b([a-zA-Z_][a-zA-Z0-9_]*)(\\.)([a-zA-Z_][a-zA-Z0-9_]*)(?:(\\.)([a-zA-Z_][a-zA-Z0-9_]*))?(?=\\s*\\{)"
+    },
+    "function_call": {
+      "captures": {
+        "1": {
+          "name": "variable.other.go"
+        },
+        "2": {
+          "name": "punctuation.other.period.go"
+        },
+        "3": {
+          "name": "entity.name.function.support.go"
+        }
+      },
+      "comment": "Function calls (e.g., helper.WithContext, fmt.Println)",
+      "match": "\\b(\\w+)(\\.)(\\w+)(?=\\s*\\()"
+    },
     "raw_string_literals": {
       "begin": "`",
       "beginCaptures": {
@@ -2365,6 +2513,21 @@
         },
         {
           "include": "#group-types"
+        },
+        {
+          "include": "#function_call"
+        },
+        {
+          "include": "#struct_literal_type"
+        },
+        {
+          "include": "#nested_field_access"
+        },
+        {
+          "include": "#field_access"
+        },
+        {
+          "include": "#dot_field_access"
         },
         {
           "include": "#group-variables"
@@ -3148,6 +3311,9 @@
         },
         {
           "include": "#map_types"
+        },
+        {
+          "include": "#package_qualified_type"
         },
         {
           "include": "#delimiters"

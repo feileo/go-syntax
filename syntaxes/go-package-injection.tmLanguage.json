@@ -1,0 +1,136 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "Go Package Injection",
+  "scopeName": "source.go.package-reference",
+  "injectionSelector": "L:source.go",
+  "patterns": [
+    {
+      "include": "#import-scanner"
+    },
+    {
+      "include": "#package-usage-validated"
+    }
+  ],
+  "repository": {
+    "import-scanner": {
+      "name": "meta.import.scanner.go",
+      "begin": "\\bimport\\b\\s*(?:\\()?",
+      "end": "(?:\\))?",
+      "patterns": [
+        {
+          "name": "string.quoted.double.go",
+          "match": "\"([^\"]+)\"",
+          "captures": {
+            "1": {
+              "name": "entity.name.package.import.go",
+              "patterns": [
+                {
+                  "match": "([^/]+)$",
+                  "captures": {
+                    "1": {
+                      "name": "entity.name.package.extracted.go"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "entity.name.package.alias.go",
+          "match": "\\b([a-zA-Z_][a-zA-Z0-9_]*)\\s+\"",
+          "captures": {
+            "1": {
+              "name": "entity.name.package.alias.go"
+            }
+          }
+        }
+      ]
+    },
+    "package-usage-validated": {
+      "patterns": [
+        {
+          "name": "meta.package.function.call.go",
+          "match": "\\b([a-z][a-z0-9]*)\\.([a-zA-Z_][a-zA-Z0-9_]*)\\s*\\(",
+          "captures": {
+            "1": {
+              "name": "entity.name.namespace.go"
+            },
+            "2": {
+              "name": "entity.name.function.support.go"
+            }
+          }
+        },
+        {
+          "name": "meta.package.type.reference.go",
+          "match": "(?<=\\b(?:type|var|const|func|return|case|interface|struct|map|chan|\\[\\]|\\*)\\s+)\\b([a-z][a-z0-9]*)\\.([A-Z][a-zA-Z0-9]*)\\b",
+          "captures": {
+            "1": {
+              "name": "entity.name.namespace.go"
+            },
+            "2": {
+              "name": "entity.name.type.go"
+            }
+          }
+        },
+        {
+          "name": "meta.package.namespace.precise",
+          "match": "(?<=\\&)([a-z][a-z0-9]*)(?=\\.([A-Z][a-zA-Z0-9]*)(?=\\s*\\{))",
+          "captures": {
+            "1": {
+              "name": "entity.name.namespace.go"
+            }
+          },
+          "comment": "Precise package namespace matching for &task.Condition{...}"
+        },
+        {
+          "name": "meta.package.namespace.type.literal",
+          "match": "(?<=\\b(?:type|var|const|func|return|case|interface|struct|map|chan|\\[\\]|\\*|&|\\()\\s*)\\b([a-z][a-z0-9]*)(?=\\.([A-Z][a-zA-Z0-9]*)(?=\\s*\\{))",
+          "captures": {
+            "1": {
+              "name": "entity.name.namespace.go"
+            }
+          },
+          "comment": "Package namespace in type literals like task.State{...} - only in type contexts"
+        },
+        {
+          "name": "meta.package.struct.literal.go",
+          "match": "(?<=\\s|\\()([a-z][a-z0-9]*)\\.([A-Z][a-zA-Z0-9]*)(?=\\s*\\{)",
+          "captures": {
+            "1": {
+              "name": "entity.name.namespace.go"
+            },
+            "2": {
+              "name": "entity.name.type.go"
+            }
+          }
+        },
+        {
+          "name": "meta.package.variable.declaration.go",
+          "match": "(?<=\\b(?:var|const)\\s+[a-zA-Z_][a-zA-Z0-9_]*\\s*=\\s*)([a-z][a-z0-9]*)\\.([A-Z][a-zA-Z0-9]*)\\b",
+          "captures": {
+            "1": {
+              "name": "entity.name.namespace.go"
+            },
+            "2": {
+              "name": "entity.name.type.go"
+            }
+          }
+        },
+        {
+          "name": "meta.package.array.type.go",
+          "match": "(?<=\\s*\\[\\])([a-z][a-z0-9]*)\\.([A-Z][a-zA-Z0-9]*)(?=\\s*\\{)",
+          "captures": {
+            "1": {
+              "name": "entity.name.namespace.go"
+            },
+            "2": {
+              "name": "entity.name.type.go"
+            }
+          },
+          "comment": "Package names in array types like []task.State{...}"
+        }
+      ]
+    }
+  }
+}
